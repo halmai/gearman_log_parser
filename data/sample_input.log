@@ -1,0 +1,61 @@
+
+2016-07-15 06:38:35.153742 : (121875_578884eb25888)             0.388553, CREATE TEMPORARY TABLE _net_position_calculator_union AS SELECT  mpal.bet_id FROM ((SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680320 AND mpal.market_selection_id = 3179452 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680356 AND mpal.market_selection_id = 3179524 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680364 AND mpal.market_selection_id = 3180652 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680372 AND mpal.market_selection_id = 3180952 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680376 AND mpal.market_selection_id = 3181136 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680380 AND mpal.market_selection_id = 3181144 AND mpal.is_betback = 0 AND mpal.leg_status = 0)) mpal GROUP BY mpal.bet_id HAVING COUNT(mpal.bet_id) = 6
+
+2016-07-15 06:38:35.189735 : (121875_578884eb25888)             0.035660, CREATE TEMPORARY TABLE _net_position_calculator_middle_level AS 
+			SELECT mpali.bet_id
+				FROM market_price_all_liability mpali
+				LEFT JOIN _net_position_calculator_union ON _net_position_calculator_union.bet_id = mpali.bet_id
+				WHERE
+					_net_position_calculator_union.bet_id IS NOT NULL AND
+                	mpali.leg_status = 0
+				GROUP BY mpali.bet_id
+				HAVING COUNT(mpali.leg_status) = 6
+
+2016-07-15 06:38:35.191397 : (121875_578884eb25888)             0.001521, SELECT  SUM(IF(bmps.bet_status IN (0,2,5), bmps.total_liability, IF(bmps.bet_status = 1, 0 - bmps.stake, 0))) as total_liability FROM bet_market_price_summary bmps WHERE bmps.legs_remaining = IF(bmps.bet_status IN (0,2,5), 6, 0) AND  bmps.bet_id IN (SELECT bet_id FROM _net_position_calculator_middle_level)
+
+2016-07-15 06:38:35.230276 : (121875_578884eb25888)             0.038777, DROP TEMPORARY TABLE _net_position_calculator_middle_level
+
+2016-07-15 06:38:35.268435 : (121875_578884eb25888)             0.038010, DROP TEMPORARY TABLE _net_position_calculator_union
+
+2016-07-15 06:38:35.268602 : (121875_578884eb25888) Gearman worker runtime:             0.506453 criteria: a:6:{s:14:"a578884d556b40";a:4:{s:9:"market_id";s:7:"6680320";s:19:"market_selection_id";s:7:"3179452";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d579bbf";a:4:{s:9:"market_id";s:7:"6680356";s:19:"market_selection_id";s:7:"3179524";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d5a48df";a:4:{s:9:"market_id";s:7:"6680364";s:19:"market_selection_id";s:7:"3180652";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d5e8fad";a:4:{s:9:"market_id";s:7:"6680372";s:19:"market_selection_id";s:7:"3180952";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d6325ae";a:4:{s:9:"market_id";s:7:"6680376";s:19:"market_selection_id";s:7:"3181136";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d69d6ec";a:4:{s:9:"market_id";s:7:"6680380";s:19:"market_selection_id";s:7:"3181144";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}}
+
+2016-07-15 06:38:35.711194 : (121875_578884eb25888)             0.437978, CREATE TEMPORARY TABLE _net_position_calculator_union AS SELECT  mpal.bet_id FROM ((SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680320 AND mpal.market_selection_id = 3179452 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680356 AND mpal.market_selection_id = 3179524 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680360 AND mpal.market_selection_id = 3180628 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680364 AND mpal.market_selection_id = 3180652 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680372 AND mpal.market_selection_id = 3180952 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680376 AND mpal.market_selection_id = 3181136 AND mpal.is_betback = 0 AND mpal.leg_status = 0)) mpal GROUP BY mpal.bet_id HAVING COUNT(mpal.bet_id) = 6
+
+2016-07-15 06:38:35.885599 : (121875_578884eb25888)             0.174280, CREATE TEMPORARY TABLE _net_position_calculator_middle_level AS 
+			SELECT mpali.bet_id
+				FROM market_price_all_liability mpali
+				LEFT JOIN _net_position_calculator_union ON _net_position_calculator_union.bet_id = mpali.bet_id
+				WHERE
+					_net_position_calculator_union.bet_id IS NOT NULL AND
+                	mpali.leg_status = 0
+				GROUP BY mpali.bet_id
+				HAVING COUNT(mpali.leg_status) = 6
+
+2016-07-15 06:38:35.886888 : (121875_578884eb25888)             0.001169, SELECT  SUM(IF(bmps.bet_status IN (0,2,5), bmps.total_liability, IF(bmps.bet_status = 1, 0 - bmps.stake, 0))) as total_liability FROM bet_market_price_summary bmps WHERE bmps.legs_remaining = IF(bmps.bet_status IN (0,2,5), 6, 0) AND  bmps.bet_id IN (SELECT bet_id FROM _net_position_calculator_middle_level)
+
+2016-07-15 06:38:35.974105 : (121875_578884eb25888)             0.087079, DROP TEMPORARY TABLE _net_position_calculator_middle_level
+
+2016-07-15 06:38:36.056954 : (121875_578884eb25888)             0.082677, DROP TEMPORARY TABLE _net_position_calculator_union
+
+2016-07-15 06:38:36.057076 : (121875_578884eb25888) Gearman worker runtime:             0.784470 criteria: a:6:{s:14:"a578884d556b40";a:4:{s:9:"market_id";s:7:"6680320";s:19:"market_selection_id";s:7:"3179452";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d579bbf";a:4:{s:9:"market_id";s:7:"6680356";s:19:"market_selection_id";s:7:"3179524";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d58d9ce";a:4:{s:9:"market_id";s:7:"6680360";s:19:"market_selection_id";s:7:"3180628";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d5a48df";a:4:{s:9:"market_id";s:7:"6680364";s:19:"market_selection_id";s:7:"3180652";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d5e8fad";a:4:{s:9:"market_id";s:7:"6680372";s:19:"market_selection_id";s:7:"3180952";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d6325ae";a:4:{s:9:"market_id";s:7:"6680376";s:19:"market_selection_id";s:7:"3181136";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}}
+
+2016-07-15 06:38:36.420629 : (121875_578884eb25888)             0.361158, CREATE TEMPORARY TABLE _net_position_calculator_union AS SELECT  mpal.bet_id FROM ((SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680320 AND mpal.market_selection_id = 3179452 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680324 AND mpal.market_selection_id = 3179460 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680356 AND mpal.market_selection_id = 3179524 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680364 AND mpal.market_selection_id = 3180652 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680368 AND mpal.market_selection_id = 3180944 AND mpal.is_betback = 0 AND mpal.leg_status = 0) UNION ALL (SELECT  mpal.bet_id FROM market_price_all_liability mpal WHERE mpal.market_id = 6680376 AND mpal.market_selection_id = 3181136 AND mpal.is_betback = 0 AND mpal.leg_status = 0)) mpal GROUP BY mpal.bet_id HAVING COUNT(mpal.bet_id) = 6
+
+2016-07-15 06:38:36.583511 : (121875_578884eb25888)             0.162724, CREATE TEMPORARY TABLE _net_position_calculator_middle_level AS 
+			SELECT mpali.bet_id
+				FROM market_price_all_liability mpali
+				LEFT JOIN _net_position_calculator_union ON _net_position_calculator_union.bet_id = mpali.bet_id
+				WHERE
+					_net_position_calculator_union.bet_id IS NOT NULL AND
+                	mpali.leg_status = 0
+				GROUP BY mpali.bet_id
+				HAVING COUNT(mpali.leg_status) = 6
+
+2016-07-15 06:38:36.584900 : (121875_578884eb25888)             0.001277, SELECT  SUM(IF(bmps.bet_status IN (0,2,5), bmps.total_liability, IF(bmps.bet_status = 1, 0 - bmps.stake, 0))) as total_liability FROM bet_market_price_summary bmps WHERE bmps.legs_remaining = IF(bmps.bet_status IN (0,2,5), 6, 0) AND  bmps.bet_id IN (SELECT bet_id FROM _net_position_calculator_middle_level)
+
+2016-07-15 06:38:36.637942 : (121875_578884eb25888)             0.052893, DROP TEMPORARY TABLE _net_position_calculator_middle_level
+
+2016-07-15 06:38:36.655291 : (121875_578884eb25888)             0.017183, DROP TEMPORARY TABLE _net_position_calculator_union
+
+2016-07-15 06:38:36.655504 : (121875_578884eb25888) Gearman worker runtime:             0.596655 criteria: a:6:{s:14:"a578884d556b40";a:4:{s:9:"market_id";s:7:"6680320";s:19:"market_selection_id";s:7:"3179452";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d56927d";a:4:{s:9:"market_id";s:7:"6680324";s:19:"market_selection_id";s:7:"3179460";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d579bbf";a:4:{s:9:"market_id";s:7:"6680356";s:19:"market_selection_id";s:7:"3179524";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d5a48df";a:4:{s:9:"market_id";s:7:"6680364";s:19:"market_selection_id";s:7:"3180652";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d5c15e3";a:4:{s:9:"market_id";s:7:"6680368";s:19:"market_selection_id";s:7:"3180944";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}s:14:"a578884d6325ae";a:4:{s:9:"market_id";s:7:"6680376";s:19:"market_selection_id";s:7:"3181136";s:10:"is_betback";i:0;s:10:"leg_status";i:0;}}
+
