@@ -54,3 +54,7 @@ the length of `2...2` block represents the second `CREATE TEMP TABLE`, the `3...
 to the first `SELECT...`, and so on. 
 
 For sample input and output, check the `data/` directory. 
+
+## How to view the result
+
+Unfortunately there are many bad SVG viewers. Some of them distort the result by adding blur effects and other annoying stuffs. To avoid this things, I used [Inkscape](http://www.inkscape.org) which displays SVG files very precisely. 
